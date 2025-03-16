@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
@@ -18,6 +17,7 @@ const Index = () => {
   const [popularMovies, setPopularMovies] = useState<Movie[]>([]);
   const [topRatedMovies, setTopRatedMovies] = useState<Movie[]>([]);
   const [popularTVShows, setPopularTVShows] = useState<Movie[]>([]);
+  const [topRatedTVShows, setTopRatedTVShows] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
   const loaderProgress = useLoaderAnimation(1.2);
@@ -52,6 +52,10 @@ const Index = () => {
         // Fetch popular TV shows
         const popularTV = await fetchTVShows('popular');
         setPopularTVShows(popularTV);
+        
+        // Fetch top rated TV shows
+        const topRatedTV = await fetchTVShows('top_rated');
+        setTopRatedTVShows(topRatedTV);
         
       } catch (error) {
         console.error('Error loading content:', error);
@@ -91,6 +95,11 @@ const Index = () => {
       id: 4,
       name: 'Popular TV Shows',
       movies: popularTVShows,
+    },
+    {
+      id: 5,
+      name: 'Top Rated TV Shows',
+      movies: topRatedTVShows,
     },
   ];
 
@@ -144,3 +153,4 @@ const Index = () => {
 };
 
 export default Index;
+
