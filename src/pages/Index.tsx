@@ -10,6 +10,7 @@ import {
   fetchTVShows 
 } from '../services/tmdb';
 import { useToast } from '@/hooks/use-toast';
+import { useLoaderAnimation } from '../utils/animations';
 
 const Index = () => {
   const [featuredContent, setFeaturedContent] = useState<Movie | null>(null);
@@ -19,6 +20,7 @@ const Index = () => {
   const [popularTVShows, setPopularTVShows] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+  const loaderProgress = useLoaderAnimation(1.2);
 
   // Smooth scroll to top when component mounts
   useEffect(() => {
@@ -59,7 +61,9 @@ const Index = () => {
           variant: "destructive",
         });
       } finally {
-        setLoading(false);
+        setTimeout(() => {
+          setLoading(false);
+        }, 800); // Small delay for smooth transition
       }
     };
     
@@ -96,10 +100,22 @@ const Index = () => {
       
       <main>
         {loading ? (
-          <div className="h-screen flex items-center justify-center">
-            <div className="animate-pulse flex flex-col items-center">
-              <div className="w-12 h-12 rounded-full nebula-gradient mb-4"></div>
-              <p className="text-nebula-accent">Loading awesome content...</p>
+          <div className="h-screen flex items-center justify-center bg-nebula-black">
+            <div className="flex flex-col items-center">
+              <div className="w-16 h-16 mb-6 relative">
+                <div className="nebula-gradient absolute inset-0 rounded-full opacity-30 animate-pulse-slow"></div>
+                <div 
+                  className="nebula-gradient absolute inset-0 rounded-full" 
+                  style={{
+                    clipPath: `polygon(50% 50%, 100% 50%, 100% 0, 0 0, 0 ${loaderProgress}%, ${loaderProgress}% 100%, 100% 100%, 100% 50%)`,
+                    opacity: 0.8,
+                    transform: 'rotate(0deg)',
+                    animation: 'glow 2s infinite'
+                  }}
+                ></div>
+              </div>
+              <p className="text-nebula-accent text-lg font-medium">Loading NebulaMovies</p>
+              <p className="text-nebula-gray/70 text-sm mt-2">Discovering cosmic entertainment</p>
             </div>
           </div>
         ) : (

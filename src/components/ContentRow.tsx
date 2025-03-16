@@ -1,8 +1,9 @@
-import { useRef, useState } from 'react';
+
+import { useRef, useState, useEffect } from 'react';
 import MovieCard from './MovieCard';
 import { Category } from '../utils/mockData';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useReveal } from '../utils/animations';
+import { useReveal, useFadeInSequence } from '../utils/animations';
 
 interface ContentRowProps {
   category: Category;
@@ -12,7 +13,15 @@ const ContentRow = ({ category }: ContentRowProps) => {
   const rowRef = useRef<HTMLDivElement>(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(true);
-  const [containerRef, isVisible] = useReveal();
+  const [containerRef, isVisible] = useReveal(0.15);
+  const fadeSequence = useFadeInSequence(category.movies, 0.08);
+  
+  // Check scroll position on mount
+  useEffect(() => {
+    if (rowRef.current) {
+      handleScroll();
+    }
+  }, [category.movies]);
   
   const scroll = (direction: 'left' | 'right') => {
     if (rowRef.current) {
@@ -32,7 +41,7 @@ const ContentRow = ({ category }: ContentRowProps) => {
     if (!rowRef.current) return;
     
     const { scrollLeft, scrollWidth, clientWidth } = rowRef.current;
-    setShowLeftArrow(scrollLeft > 0);
+    setShowLeftArrow(scrollLeft > 10);
     setShowRightArrow(scrollLeft + clientWidth < scrollWidth - 10);
   };
   
@@ -43,7 +52,7 @@ const ContentRow = ({ category }: ContentRowProps) => {
         isVisible ? 'opacity-100' : 'opacity-0'
       }`}
     >
-      <div className="netflix-container mb-2">
+      <div className="nebula-container mb-2">
         <h2 className="text-white text-xl md:text-2xl font-bold tracking-tight">
           {category.name}
         </h2>
@@ -52,8 +61,9 @@ const ContentRow = ({ category }: ContentRowProps) => {
       <div className="relative group">
         {showLeftArrow && (
           <button 
-            className="absolute left-0 top-1/2 z-10 -translate-y-1/2 bg-netflix-black/30 hover:bg-netflix-black/70 rounded-r-md p-2 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            className="absolute left-0 top-1/2 z-10 -translate-y-1/2 bg-nebula-black/30 hover:bg-nebula-black/70 rounded-r-md p-2 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300"
             onClick={() => scroll('left')}
+            aria-label="Scroll left"
           >
             <ChevronLeft className="w-6 h-6 text-white" />
           </button>
@@ -67,13 +77,11 @@ const ContentRow = ({ category }: ContentRowProps) => {
           {category.movies.map((movie, index) => (
             <div 
               key={movie.id} 
-              className="flex-none w-[180px] sm:w-[200px] md:w-[240px] first:ml-0"
+              className="flex-none w-[180px] sm:w-[200px] md:w-[240px] first:ml-0 transition-all duration-500"
               style={{ 
-                animationDelay: `${index * 0.1}s`,
-                animationFillMode: 'both',
-                animation: isVisible ? 'slideUp 0.5s ease-out forwards' : 'none',
-                opacity: 0,
-                transform: 'translateY(20px)'
+                opacity: fadeSequence[index] ? 1 : 0,
+                transform: fadeSequence[index] ? 'translateY(0)' : 'translateY(20px)',
+                transition: `opacity 0.5s ease, transform 0.5s ease`
               }}
             >
               <MovieCard movie={movie} index={index} />
@@ -83,8 +91,9 @@ const ContentRow = ({ category }: ContentRowProps) => {
         
         {showRightArrow && (
           <button 
-            className="absolute right-0 top-1/2 z-10 -translate-y-1/2 bg-netflix-black/30 hover:bg-netflix-black/70 rounded-l-md p-2 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            className="absolute right-0 top-1/2 z-10 -translate-y-1/2 bg-nebula-black/30 hover:bg-nebula-black/70 rounded-l-md p-2 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300"
             onClick={() => scroll('right')}
+            aria-label="Scroll right"
           >
             <ChevronRight className="w-6 h-6 text-white" />
           </button>

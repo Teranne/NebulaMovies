@@ -60,3 +60,61 @@ export const getHoverAnimation = (scale = 1.05, duration = 0.3) => ({
   whileHover: { scale },
   transition: { duration }
 });
+
+// Hook for smooth carousel animations
+export const useCarouselAnimation = (speed = 0.3) => {
+  const [isAnimating, setIsAnimating] = useState(false);
+  
+  const startAnimation = () => {
+    setIsAnimating(true);
+    const timer = setTimeout(() => setIsAnimating(false), speed * 1000);
+    return () => clearTimeout(timer);
+  };
+  
+  return { isAnimating, startAnimation, duration: speed };
+};
+
+// Hook for fade-in animation sequence
+export const useFadeInSequence = (items: any[], delay = 0.1) => {
+  const [visibleItems, setVisibleItems] = useState<boolean[]>(Array(items.length).fill(false));
+  
+  useEffect(() => {
+    const timers: NodeJS.Timeout[] = [];
+    
+    items.forEach((_, index) => {
+      const timer = setTimeout(() => {
+        setVisibleItems(prev => {
+          const updated = [...prev];
+          updated[index] = true;
+          return updated;
+        });
+      }, index * delay * 1000);
+      
+      timers.push(timer);
+    });
+    
+    return () => {
+      timers.forEach(timer => clearTimeout(timer));
+    };
+  }, [items, delay]);
+  
+  return visibleItems;
+};
+
+// Hook for loader/spinner animations
+export const useLoaderAnimation = (duration = 1.5) => {
+  const [progress, setProgress] = useState(0);
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setProgress(prev => {
+        if (prev >= 100) return 0;
+        return prev + 1;
+      });
+    }, duration * 10);
+    
+    return () => clearInterval(interval);
+  }, [duration]);
+  
+  return progress;
+};
