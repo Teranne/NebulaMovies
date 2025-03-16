@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import NotFound from "./pages/NotFound";
+import MovieDetail from "./pages/MovieDetail";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +44,7 @@ const AppContent = () => {
       <Route path="/movies" element={<Index />} />
       <Route path="/tv" element={<Index />} />
       <Route path="/trending" element={<Index />} />
+      <Route path="/detail/:mediaType/:id" element={<MovieDetail />} />
       
       {/* Protected routes */}
       <Route 

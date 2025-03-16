@@ -1,5 +1,6 @@
 
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Movie } from '../utils/mockData';
 import { Play, Plus, ThumbsUp, ChevronDown } from 'lucide-react';
 
@@ -10,16 +11,22 @@ interface MovieCardProps {
 
 const MovieCard = ({ movie, index }: MovieCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
+  const navigate = useNavigate();
+  
+  const handleClick = () => {
+    navigate(`/detail/${movie.mediaType}/${movie.id}`);
+  };
   
   return (
     <div 
-      className="relative transition-all duration-300 ease-in-out"
+      className="relative transition-all duration-300 ease-in-out cursor-pointer"
       style={{ 
         animationDelay: `${index * 0.1}s`,
         zIndex: isHovered ? 10 : 1
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={handleClick}
     >
       <div 
         className={`card-hover-effect rounded-md overflow-hidden ${

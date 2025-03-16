@@ -15,6 +15,9 @@ export interface TMDBMovie {
   overview: string;
   genre_ids: number[];
   media_type?: string;
+  runtime?: number;
+  episode_run_time?: number[];
+  genres?: { id: number; name: string }[];
 }
 
 export interface TMDBGenre {
@@ -48,9 +51,11 @@ export const formatMovie = (movie: TMDBMovie) => {
     backdrop: formatImageUrl(movie.backdrop_path, 'original'),
     year: new Date(movie.release_date || movie.first_air_date || '').getFullYear() || 0,
     rating: movie.vote_average,
-    duration: '2h 0m', // Need a separate request to get the runtime
+    duration: movie.runtime ? formatRuntime(movie.runtime) : 
+             movie.episode_run_time && movie.episode_run_time.length > 0 ? 
+             formatRuntime(movie.episode_run_time[0]) : '2h 0m',
     description: movie.overview,
-    genres: [], // Need a separate request to get the genres
+    genres: movie.genres ? movie.genres.map(g => g.name) : [],
     mediaType: movie.media_type || 'movie'
   };
 };
@@ -99,14 +104,30 @@ export const fetchGenres = async (mediaType = 'movie') => {
   }
 };
 
-export const fetchMovieDetails = async (id: number) => {
+export const fetchMovieDetails = async (id: number, mediaType = 'movie') => {
   try {
-    const response = await fetch(`${BASE_URL}/movie/${id}?api_key=${API_KEY}&language=en-US`);
+    const endpoint = mediaType === 'tv' ? 'tv' : 'movie';
+    const response = await fetch(`${BASE_URL}/${endpoint}/${id}?api_key=${API_KEY}&language=en-US&append_to_response=credits,similar`);
     const data = await response.json();
+    
+    // Get runtime based on media type
+    let runtime;
+    if (mediaType === 'tv' && data.episode_run_time && data.episode_run_time.length > 0) {
+      runtime = formatRuntime(data.episode_run_time[0]);
+    } else if (data.runtime) {
+      runtime = formatRuntime(data.runtime);
+    } else {
+      runtime = 'N/A';
+    }
+    
+    // Format the genres
+    const genres = data.genres ? data.genres.map((genre: TMDBGenre) => genre.name) : [];
+    
     return {
       ...formatMovie(data),
-      duration: formatRuntime(data.runtime || 0),
-      genres: data.genres.map((genre: TMDBGenre) => genre.name)
+      duration: runtime,
+      genres: genres,
+      mediaType: mediaType
     };
   } catch (error) {
     console.error('Error fetching movie details:', error);
