@@ -1,39 +1,41 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 3%;
+    --background: 240 15% 7%;
     --foreground: 0 0% 98%;
 
-    --card: 0 0% 5%;
+    --card: 240 15% 10%;
     --card-foreground: 0 0% 98%;
 
-    --popover: 0 0% 3%;
+    --popover: 240 15% 7%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 0 100% 48%;
+    --primary: 258 73% 64%;
     --primary-foreground: 0 0% 98%;
 
-    --secondary: 0 0% 9%;
+    --secondary: 240 15% 15%;
     --secondary-foreground: 0 0% 98%;
 
-    --muted: 0 0% 14%;
-    --muted-foreground: 0 0% 63%;
+    --muted: 240 15% 20%;
+    --muted-foreground: 240 5% 64.9%;
 
-    --accent: 0 0% 14%;
+    --accent: 191 90% 57%;
     --accent-foreground: 0 0% 98%;
 
-    --destructive: 0 63% 31%;
+    --destructive: 347 100% 66%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
+    --border: 240 15% 20%;
+    --input: 240 15% 20%;
+    --ring: 240 10% 55%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
   }
 }
 
@@ -43,33 +45,53 @@
   }
   
   html, body {
-    @apply antialiased;
+    @apply antialiased font-space;
     scroll-behavior: smooth;
   }
   
   body {
-    @apply bg-netflix-black text-foreground;
+    @apply bg-nebula-black text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 
-  /* Netflix-inspired focus ring */
+  /* Focus ring */
   *:focus-visible {
-    @apply outline-none ring-2 ring-netflix-red ring-offset-2 ring-offset-background;
+    @apply outline-none ring-2 ring-nebula-accent ring-offset-2 ring-offset-background;
   }
 }
 
 @layer components {
-  .netflix-container {
+  .nebula-container {
     @apply w-full max-w-[2400px] mx-auto px-4 sm:px-6 md:px-8;
   }
   
   .hero-gradient {
     background: linear-gradient(
       to top,
-      rgba(10, 10, 10, 1) 0%,
-      rgba(10, 10, 10, 0.8) 60%,
-      rgba(10, 10, 10, 0) 100%
+      rgba(15, 14, 23, 1) 0%,
+      rgba(15, 14, 23, 0.8) 60%,
+      rgba(15, 14, 23, 0) 100%
     );
+  }
+  
+  .nebula-btn {
+    @apply px-6 py-2.5 rounded-lg font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+  
+  .nebula-btn-primary {
+    @apply nebula-btn bg-nebula-primary hover:bg-nebula-primary/90 text-white focus:ring-nebula-primary/50;
+  }
+  
+  .nebula-btn-secondary {
+    @apply nebula-btn bg-nebula-dark hover:bg-nebula-dark/90 text-white focus:ring-nebula-dark/50;
+  }
+  
+  .nebula-btn-accent {
+    @apply nebula-btn bg-nebula-accent hover:bg-nebula-accent/90 text-white focus:ring-nebula-accent/50;
+  }
+  
+  .nebula-card {
+    @apply bg-nebula-dark rounded-xl overflow-hidden border border-white/5 shadow-lg;
   }
   
   .card-hover-effect {
@@ -94,5 +116,29 @@
   
   .glassmorphism {
     @apply bg-black/30 backdrop-blur-md;
+  }
+  
+  .nebula-gradient {
+    @apply bg-gradient-to-r from-nebula-primary to-nebula-gradient;
+  }
+  
+  .nebula-text-gradient {
+    @apply bg-gradient-to-r from-nebula-primary to-nebula-accent bg-clip-text text-transparent;
+  }
+  
+  .nebula-logo-glow {
+    box-shadow: 0 0 15px 5px rgba(118, 97, 228, 0.3);
+  }
+
+  .shimmer {
+    @apply animate-shimmer bg-gradient-to-r from-transparent via-white/10 to-transparent bg-[length:200%_100%];
+  }
+
+  .auth-form {
+    @apply space-y-6 p-6 bg-nebula-dark rounded-2xl border border-white/5 w-full max-w-md;
+  }
+  
+  .auth-input {
+    @apply w-full px-4 py-3 rounded-lg bg-nebula-black border border-white/10 text-white placeholder:text-white/40 focus:border-nebula-accent;
   }
 }

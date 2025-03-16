@@ -1,9 +1,10 @@
+
 import { useState, useEffect, useRef } from 'react';
 
 // Hook for revealing elements on scroll
 export const useReveal = (threshold = 0.1) => {
   const [isRevealed, setIsRevealed] = useState(false);
-  const ref = useRef<HTMLElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!ref.current) return;
@@ -23,7 +24,7 @@ export const useReveal = (threshold = 0.1) => {
     return () => {
       observer.disconnect();
     };
-  }, [ref, threshold]);
+  }, [threshold]);
 
   return [ref, isRevealed] as const;
 };

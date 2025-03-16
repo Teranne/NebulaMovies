@@ -31,12 +31,16 @@ export default {
         foreground: 'hsl(var(--foreground))',
         
         // Custom streaming platform colors
-        netflix: {
-          red: '#E50914',
-          black: '#0A0A0A',
-          dark: '#121212',
-          gray: '#8C8C8C',
-          lightgray: '#B3B3B3',
+        nebula: {
+          primary: '#7661E4', // Main purple
+          accent: '#31C4F3', // Bright blue accent
+          gradient: '#A74BE4', // Secondary purple for gradients
+          black: '#0F0E17', // Near-black
+          dark: '#1A1B2D', // Dark blue-tinted background
+          gray: '#8C8C9D', // Muted gray
+          lightgray: '#BFBFD0', // Light gray
+          success: '#00D1A1', // Success green
+          error: '#FF5470', // Error/destructive red
         },
         
         primary: {
@@ -102,6 +106,10 @@ export default {
           '0%': { transform: 'scale(1)' },
           '100%': { transform: 'scale(1.05)' },
         },
+        glow: {
+          '0%, 100%': { filter: 'brightness(1)' },
+          '50%': { filter: 'brightness(1.3)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -111,6 +119,7 @@ export default {
         'pulse-slow': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'shimmer': 'shimmer 1.5s infinite linear',
         'scale': 'scale 0.3s ease-in-out',
+        'glow': 'glow 2s ease-in-out infinite',
       },
       transitionProperty: {
         'height': 'height',
@@ -119,6 +128,9 @@ export default {
       backdropFilter: {
         'none': 'none',
         'blur': 'blur(20px)',
+      },
+      fontFamily: {
+        'space': ['Space Grotesk', 'sans-serif'],
       },
     }
   },
