@@ -12,7 +12,7 @@ const Hero = ({ movie }: HeroProps) => {
   
   return (
     <div 
-      ref={containerRef as React.RefObject<HTMLDivElement>}
+      ref={containerRef}
       className="relative w-full h-[85vh] min-h-[650px] flex items-end"
       style={{
         backgroundImage: `url(${movie.backdrop})`,

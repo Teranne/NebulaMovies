@@ -1,4 +1,3 @@
-
 import { useRef, useState } from 'react';
 import MovieCard from './MovieCard';
 import { Category } from '../utils/mockData';
@@ -39,7 +38,7 @@ const ContentRow = ({ category }: ContentRowProps) => {
   
   return (
     <div 
-      ref={containerRef as React.RefObject<HTMLDivElement>}
+      ref={containerRef}
       className={`content-row transition-opacity duration-1000 ${
         isVisible ? 'opacity-100' : 'opacity-0'
       }`}

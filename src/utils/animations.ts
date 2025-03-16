@@ -1,13 +1,12 @@
-
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 // Hook for revealing elements on scroll
 export const useReveal = (threshold = 0.1) => {
   const [isRevealed, setIsRevealed] = useState(false);
-  const [ref, setRef] = useState<HTMLElement | null>(null);
+  const ref = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    if (!ref) return;
+    if (!ref.current) return;
     
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -19,14 +18,14 @@ export const useReveal = (threshold = 0.1) => {
       { threshold }
     );
     
-    observer.observe(ref);
+    observer.observe(ref.current);
     
     return () => {
       observer.disconnect();
     };
   }, [ref, threshold]);
 
-  return [setRef, isRevealed] as const;
+  return [ref, isRevealed] as const;
 };
 
 // Hook for parallax effect
