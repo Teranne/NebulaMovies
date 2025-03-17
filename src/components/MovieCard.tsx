@@ -14,7 +14,9 @@ const MovieCard = ({ movie, index }: MovieCardProps) => {
   const navigate = useNavigate();
   
   const handleClick = () => {
-    navigate(`/detail/${movie.mediaType}/${movie.id}`);
+    // Default to 'movie' type if mediaType isn't specified
+    const mediaType = movie.mediaType || 'movie';
+    navigate(`/detail/${mediaType}/${movie.id}`);
   };
   
   return (

@@ -3,6 +3,7 @@ import { Play, Info } from 'lucide-react';
 import { Movie } from '../utils/mockData';
 import { useReveal } from '../utils/animations';
 import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
 
 interface HeroProps {
   movie: Movie;
@@ -10,6 +11,11 @@ interface HeroProps {
 
 const Hero = ({ movie }: HeroProps) => {
   const [containerRef, isVisible] = useReveal();
+  const navigate = useNavigate();
+  
+  const handleMoreInfoClick = () => {
+    navigate(`/detail/${movie.mediaType}/${movie.id}`);
+  };
   
   return (
     <div 
@@ -67,6 +73,7 @@ const Hero = ({ movie }: HeroProps) => {
               <Button 
                 variant="outline"
                 className="border-white/20 bg-nebula-dark/80 hover:bg-nebula-dark text-white font-semibold px-6 py-2 rounded-lg flex items-center transform transition-all duration-300 hover:scale-105"
+                onClick={handleMoreInfoClick}
               >
                 <Info className="w-5 h-5 mr-2" />
                 More Info
